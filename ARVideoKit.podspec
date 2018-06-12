@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name = 'Alamofire'
+  s.name = 'ARVideoKit'
   s.version = '1.3'
   s.license = 'MIT'
   s.summary = 'Elegant HTTP Networking in Swift'
