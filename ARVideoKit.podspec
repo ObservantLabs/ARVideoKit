@@ -9,5 +9,5 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '11.0'
 
-  s.source_files = 'ARVideoKit/*.swift'
+  s.source_files = 'ARVideoKit/Enumerations/*.swift,ARVideoKit/Extensions/*.swift,ARVideoKit/Protocols/*.swift,ARVideoKit/Sources/*.swift,ARVideoKit/Rendering/*.swift,ARVideoKit/Rendering/GIF/*.swift,ARVideoKit/Rendering/Live Photo/*.swift,ARVideoKit/Rendering/Writer/*.swift,ARVideoKit/ARVideoKit.h'
 end
