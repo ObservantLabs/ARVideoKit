@@ -37,7 +37,7 @@ internal class WritAR:NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
         if audioEnabled {
             if allowMix {
                 do {
-                    try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord, with: [AVAudioSessionCategoryOptions.mixWithOthers , AVAudioSessionCategoryOptions.allowBluetooth, AVAudioSessionCategoryOptions.defaultToSpeaker, AVAudioSessionCategoryOptions.interruptSpokenAudioAndMixWithOthers])
+                    try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord, mode: .default, options: [AVAudioSession.CategoryOptions.mixWithOthers , AVAudioSession.CategoryOptions.allowBluetooth, AVAudioSession.CategoryOptions.defaultToSpeaker, AVAudioSession.CategoryOptions.interruptSpokenAudioAndMixWithOthers])
                     try AVAudioSession.sharedInstance().setActive(true)
                 }catch{}
             }
@@ -163,7 +163,7 @@ internal class WritAR:NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
     internal var isWritingWithoutError: Bool?
     
     internal func insert(pixel buffer:CVPixelBuffer, with intervals:CFTimeInterval) {
-        var time:CMTime {return CMTimeMakeWithSeconds(intervals, 1000000);}
+        var time:CMTime {return CMTimeMakeWithSeconds(intervals, preferredTimescale: 1000000);}
         if assetWriter.status == .unknown {
             if let _ = startingVideoTime {isWritingWithoutError = false; return}else{startingVideoTime = time}
             if assetWriter.startWriting() {

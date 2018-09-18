@@ -202,7 +202,7 @@ fileprivate var renderer:RenderAR!
             
             gpuLoop = CADisplayLink(target: self, selector: #selector(renderFrame))
             gpuLoop.preferredFramesPerSecond = fps.rawValue
-            gpuLoop.add(to: .main, forMode: .commonModes)
+            gpuLoop.add(to: .main, forMode: RunLoop.Mode.common)
             
             status = .readyToRecord
         }else if let view = view as? ARSKView {
@@ -222,7 +222,7 @@ fileprivate var renderer:RenderAR!
             
             gpuLoop = CADisplayLink(target: self, selector: #selector(renderFrame))
             gpuLoop.preferredFramesPerSecond = fps.rawValue
-            gpuLoop.add(to: .main, forMode: .commonModes)
+            gpuLoop.add(to: .main, forMode: RunLoop.Mode.common)
             
             status = .readyToRecord
         }else if let view = view as? SCNView {
@@ -232,7 +232,7 @@ fileprivate var renderer:RenderAR!
             
             gpuLoop = CADisplayLink(target: self, selector: #selector(renderFrame))
             gpuLoop.preferredFramesPerSecond = fps.rawValue
-            gpuLoop.add(to: .main, forMode: .commonModes)
+            gpuLoop.add(to: .main, forMode: RunLoop.Mode.common)
             
             status = .readyToRecord
         }
@@ -254,7 +254,7 @@ fileprivate var renderer:RenderAR!
         
         renderer = RenderAR(view, renderer: renderEngine, contentMode: contentMode)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterBackground), name: Notification.Name.UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterBackground), name: UIApplication.willResignActiveNotification, object: nil)
     }
     
     
@@ -720,7 +720,7 @@ internal extension RecordAR {
         renderer.ARcontentMode = contentMode
 
         self.writerQueue.sync {
-            var time:CMTime {return CMTimeMakeWithSeconds(renderer.time, 1000000);}
+            var time:CMTime {return CMTimeMakeWithSeconds(renderer.time, preferredTimescale: 1000000);}
             
             self.renderAR?.frame(didRender: buffer, with: time, using: rawBuffer)
 

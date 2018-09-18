@@ -25,11 +25,11 @@ internal class LivePhotoGenerator {
             generator.appliesPreferredTrackTransform = true
             
             //retrieves the key photo frame from the middle of the video asset
-            let time = NSValue(time: CMTimeMultiplyByFloat64(asset.duration, 0.5))
+            let time = NSValue(time: CMTimeMultiplyByFloat64(asset.duration, multiplier: 0.5))
             
             //generates the key photo CGImage asynchronously
             generator.generateCGImagesAsynchronously(forTimes: [time], completionHandler:{_,image,_,_,_ in
-                if let cgImg = image, let imgData = UIImagePNGRepresentation(UIImage(cgImage: cgImg)) {
+                if let cgImg = image, let imgData = UIImage(cgImage: cgImg).pngData() {
                     do {
                         self.keyPhotoPath = self.newPath(for: true, and: false)
                         try imgData.write(to: self.keyPhotoPath!, options: [.atomic])
