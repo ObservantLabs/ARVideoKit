@@ -118,6 +118,7 @@ internal class WritAR:NSObject, AVCaptureAudioDataOutputSampleBufferDelegate {
             isWritingWithoutError = false
         }
         assetWriter.shouldOptimizeForNetworkUse = adjustForSharing
+        assetWriter.movieFragmentInterval = CMTime(value: 1, timescale: 1)
     }
     
     internal func prepareAudioDevice(with queue:DispatchQueue) {
