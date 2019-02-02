@@ -98,6 +98,7 @@ fileprivate var renderer:RenderAR!
             }
         }
     }
+    @objc public var sessionName : String = "\(Date().timeIntervalSince1970)"
     
     //MARK: - Public initialization methods
     /**
@@ -190,7 +191,10 @@ fileprivate var renderer:RenderAR!
         let date = Date(timeIntervalSince1970: Date().timeIntervalSince1970)
         
         let vidPath = "\(documentsDirectory)/\(formatter.string(from: date))ARVideo.mp4"
-        return URL(fileURLWithPath: vidPath, isDirectory: false)
+        guard let vidURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("CameraRecording-\(Bundle.main.bundleIdentifier!)-\(sessionName).mp4") else {
+            return URL(fileURLWithPath: vidPath, isDirectory: false) // 🙄
+        }
+        return vidURL
     }
     
     //MARK: - Internal Video Setup
