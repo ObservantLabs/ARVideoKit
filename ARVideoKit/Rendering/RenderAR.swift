@@ -26,19 +26,28 @@ struct RenderAR {
     var time: CFTimeInterval { return CACurrentMediaTime()}
     var rawBuffer: CVPixelBuffer? {
         if let view = view as? ARSCNView {
-            guard let rawBuffer = view.session.currentFrame?.capturedImage else { return nil }
-            return rawBuffer
+            guard let currentFrame = view.session.currentFrame else {
+//                print("  RenderAR: no currentFrame")
+                return nil
+            }
+            
+            return currentFrame.capturedImage
         } else if let view = view as? ARSKView {
             guard let rawBuffer = view.session.currentFrame?.capturedImage else { return nil }
             return rawBuffer
         } else if view is SCNView {
             return buffer
         }
+        
+//        print("  RenderAR: view does not conform to any expected class")
         return nil
     }
     
     var bufferSize: CGSize? {
-        guard let raw = rawBuffer else { return nil }
+        guard let raw = rawBuffer else {
+//            print("  RenderAR: no rawBuffer")
+            return nil
+        }
         var width = CVPixelBufferGetWidth(raw)
         var height = CVPixelBufferGetHeight(raw)
         
@@ -83,17 +92,25 @@ struct RenderAR {
     
     var buffer: CVPixelBuffer? {
         if view is ARSCNView {
-            guard let size = bufferSize else { return nil }
+            guard let size = bufferSize else {
+                print("  RenderAR error: no bufferSize")
+                return nil
+            }
             //UIScreen.main.bounds.size
             var renderedFrame: UIImage?
             pixelsQueue.sync {
                 renderedFrame = renderEngine.snapshot(atTime: self.time, with: size, antialiasingMode: .none)
             }
             if let _ = renderedFrame {
+//                print("  RenderAR: let _ = renderedFrame")
             } else {
+//                print("  RenderAR: renderEngine.snapshot")
                 renderedFrame = renderEngine.snapshot(atTime: time, with: size, antialiasingMode: .none)
             }
-            guard let buffer = renderedFrame!.buffer else { return nil }
+            guard let buffer = renderedFrame!.buffer else {
+//                print("  RenderAR error: no renderedFrame!.buffer")
+                return nil
+            }
             return buffer
         } else if view is ARSKView {
             guard let size = bufferSize else { return nil }

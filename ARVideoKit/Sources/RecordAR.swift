@@ -499,7 +499,12 @@ private var renderer: RenderAR!
             resumeFrameTime = nil
             
             DispatchQueue.main.async {
-                self.writer?.end {
+                guard let writer = self.writer else {
+                    assertionFailure("RecordAR.writer is nil")
+                    return
+                }
+                
+                writer.end {
                     if let path = self.currentVideoPath {
                         finished?(path)
                         self.delegate?.recorder(didEndRecording: path, with: true)
@@ -712,7 +717,13 @@ extension RecordAR {
         //frame rendering
         if self.onlyRenderWhileRec && !isRecording && !isRecordingGIF { return }
 
-        guard let buffer = renderer.buffer else { return }
+        guard let buffer = renderer.buffer else {
+//            print("  RecordAR error: No buffer")
+            return
+        }
+        
+//        print("  RecordAR: Found buffer!")
+        
         guard let rawBuffer = renderer.rawBuffer else {
             logAR.message("ERROR:- An error occurred while rendering the camera's main buffers.")
             return
